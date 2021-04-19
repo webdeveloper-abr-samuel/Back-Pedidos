@@ -1,0 +1,9 @@
+###
+POST    http://localhost:3000/abrageo/statistic/distributor/Lineal HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSG90dG9zdG9vbHMiLCJwcm9maWxlIjo1LCJleHBpcmVzSW4iOiIxZCIsImlhdCI6MTYxODQyNTQzM30.6-nQzifoXnmSfkWqHPeWCOw75TLm6PUcY6243gNgY8c
+
+###
+GET   http://localhost:3000/abrageo/statistic/distributor/Pie HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSG90dG9zdG9vbHMiLCJwcm9maWxlIjo1LCJleHBpcmVzSW4iOiIxZCIsImlhdCI6MTYxODQyNTQzM30.6-nQzifoXnmSfkWqHPeWCOw75TLm6PUcY6243gNgY8c
