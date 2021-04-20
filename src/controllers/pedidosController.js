@@ -2,13 +2,17 @@ const gestiondiaria = require("../models").gestiondiaria;
 const detalleorden = require("../models").detalleorden;
 const fichacliente = require("../models").fichacliente;
 const estados = require("../models").estados;
+const { Op } = require("sequelize");
 pedidosController = {};
 
 pedidosController.get = async (req, res) => {
   const distribuidor = req.distribuidor;
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
-
+  var f = new Date();
+  const mes = f.getMonth()+1;
+  const mesActual = mes < 10 ? `0${mes}` : mes;
+  var date = f.getFullYear()+"-"+mesActual;
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -28,6 +32,9 @@ pedidosController.get = async (req, res) => {
         ],
         where: {
           distribuidor,
+          ingresoFH: {
+            [Op.substring]: date,
+          }
         },
       });
       return res.status(200).json({
@@ -55,6 +62,9 @@ pedidosController.get = async (req, res) => {
         where: {
           distribuidor,
           asesordistribuidor,
+          ingresoFH: {
+            [Op.substring]: date,
+          }
         },
       });
 
@@ -122,7 +132,10 @@ pedidosController.getProceso = async (req, res) => {
   const distribuidor = req.distribuidor;
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
-
+  var f = new Date();
+  const mes = f.getMonth()+1;
+  const mesActual = mes < 10 ? `0${mes}` : mes;
+  var date = f.getFullYear()+"-"+mesActual;
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -143,6 +156,9 @@ pedidosController.getProceso = async (req, res) => {
         where: {
           distribuidor,
           idEstado: 1,
+          ingresoFH: {
+            [Op.substring]: date,
+          }
         },
       });
       return res.status(200).json({
@@ -171,6 +187,9 @@ pedidosController.getProceso = async (req, res) => {
           distribuidor,
           asesordistribuidor,
           idEstado: 1,
+          ingresoFH: {
+            [Op.substring]: date,
+          }
         },
       });
 
@@ -190,7 +209,10 @@ pedidosController.getDespachados = async (req, res) => {
   const distribuidor = req.distribuidor;
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
-
+  var f = new Date();
+  const mes = f.getMonth()+1;
+  const mesActual = mes < 10 ? `0${mes}` : mes;
+  var date = f.getFullYear()+"-"+mesActual;
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -211,6 +233,9 @@ pedidosController.getDespachados = async (req, res) => {
         where: {
           distribuidor,
           idEstado: 2,
+          ingresoFH: {
+            [Op.substring]: date,
+          }
         },
       });
       return res.status(200).json({
@@ -239,6 +264,9 @@ pedidosController.getDespachados = async (req, res) => {
           distribuidor,
           asesordistribuidor,
           idEstado: 2,
+          ingresoFH: {
+            [Op.substring]: date,
+          }
         },
       });
 
@@ -258,7 +286,10 @@ pedidosController.getNoDespachados = async (req, res) => {
   const distribuidor = req.distribuidor;
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
-
+  var f = new Date();
+  const mes = f.getMonth()+1;
+  const mesActual = mes < 10 ? `0${mes}` : mes;
+  var date = f.getFullYear()+"-"+mesActual;
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -279,6 +310,9 @@ pedidosController.getNoDespachados = async (req, res) => {
         where: {
           distribuidor,
           idEstado: 3,
+          ingresoFH: {
+            [Op.substring]: date,
+          }
         },
       });
       return res.status(200).json({
@@ -307,6 +341,9 @@ pedidosController.getNoDespachados = async (req, res) => {
           distribuidor,
           asesordistribuidor,
           idEstado: 3,
+          ingresoFH: {
+            [Op.substring]: date,
+          }
         },
       });
 
@@ -324,11 +361,25 @@ pedidosController.getNoDespachados = async (req, res) => {
 
 pedidosController.getDetalleOrden = async (req, res) => {
   const id = req.params.id;
+  const data = [];
   try {
-    let data = await detalleorden.findAll({
+    let result = await detalleorden.findAll({
       where: {
         idGestion: id,
       },
+    });
+
+    result.forEach(element => {
+      const {id,idGestion, code, referencia, valor, cantidad} = element;
+      const total = valor.toLocaleString("es-ES");
+      data.push({
+        id,
+        idGestion, 
+        code, 
+        referencia, 
+        valor: "$"+total, 
+        cantidad
+      })
     });
 
     return res.status(200).json({
@@ -375,8 +426,9 @@ pedidosController.getPdf = async (req, res) => {
     });
 
     const { valorPedido,nit,savedBy,ingresoFH,distribuidor,asesordistribuidor } = result
+    const total = valorPedido.toLocaleString("es-ES");
     data.push({
-      valorPedido,
+      valorPedido: "$"+total,
       nit,
       savedBy,
       ingresoFH,
