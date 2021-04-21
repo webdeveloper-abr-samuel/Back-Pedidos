@@ -2,6 +2,7 @@ const gestiondiaria = require("../models").gestiondiaria;
 const detalleorden = require("../models").detalleorden;
 const fichacliente = require("../models").fichacliente;
 const estados = require("../models").estados;
+const appusers = require("../models").appusers;
 const { Op } = require("sequelize");
 pedidosController = {};
 
@@ -10,9 +11,9 @@ pedidosController.get = async (req, res) => {
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
   var f = new Date();
-  const mes = f.getMonth()+1;
+  const mes = f.getMonth() + 1;
   const mesActual = mes < 10 ? `0${mes}` : mes;
-  var date = f.getFullYear()+"-"+mesActual;
+  var date = f.getFullYear() + "-" + mesActual;
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -34,7 +35,7 @@ pedidosController.get = async (req, res) => {
           distribuidor,
           ingresoFH: {
             [Op.substring]: date,
-          }
+          },
         },
       });
       return res.status(200).json({
@@ -64,7 +65,7 @@ pedidosController.get = async (req, res) => {
           asesordistribuidor,
           ingresoFH: {
             [Op.substring]: date,
-          }
+          },
         },
       });
 
@@ -119,7 +120,7 @@ pedidosController.update = async (req, res) => {
     );
     return res.status(200).json({
       data,
-      message: "Datos Guardados correctamente",
+      message: "Datos Actualizados correctamente",
     });
   } catch (error) {
     return res.status(500).json({
@@ -133,9 +134,9 @@ pedidosController.getProceso = async (req, res) => {
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
   var f = new Date();
-  const mes = f.getMonth()+1;
+  const mes = f.getMonth() + 1;
   const mesActual = mes < 10 ? `0${mes}` : mes;
-  var date = f.getFullYear()+"-"+mesActual;
+  var date = f.getFullYear() + "-" + mesActual;
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -158,7 +159,7 @@ pedidosController.getProceso = async (req, res) => {
           idEstado: 1,
           ingresoFH: {
             [Op.substring]: date,
-          }
+          },
         },
       });
       return res.status(200).json({
@@ -189,7 +190,7 @@ pedidosController.getProceso = async (req, res) => {
           idEstado: 1,
           ingresoFH: {
             [Op.substring]: date,
-          }
+          },
         },
       });
 
@@ -210,9 +211,9 @@ pedidosController.getDespachados = async (req, res) => {
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
   var f = new Date();
-  const mes = f.getMonth()+1;
+  const mes = f.getMonth() + 1;
   const mesActual = mes < 10 ? `0${mes}` : mes;
-  var date = f.getFullYear()+"-"+mesActual;
+  var date = f.getFullYear() + "-" + mesActual;
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -235,7 +236,7 @@ pedidosController.getDespachados = async (req, res) => {
           idEstado: 2,
           ingresoFH: {
             [Op.substring]: date,
-          }
+          },
         },
       });
       return res.status(200).json({
@@ -266,7 +267,7 @@ pedidosController.getDespachados = async (req, res) => {
           idEstado: 2,
           ingresoFH: {
             [Op.substring]: date,
-          }
+          },
         },
       });
 
@@ -287,9 +288,9 @@ pedidosController.getNoDespachados = async (req, res) => {
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
   var f = new Date();
-  const mes = f.getMonth()+1;
+  const mes = f.getMonth() + 1;
   const mesActual = mes < 10 ? `0${mes}` : mes;
-  var date = f.getFullYear()+"-"+mesActual;
+  var date = f.getFullYear() + "-" + mesActual;
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -312,7 +313,7 @@ pedidosController.getNoDespachados = async (req, res) => {
           idEstado: 3,
           ingresoFH: {
             [Op.substring]: date,
-          }
+          },
         },
       });
       return res.status(200).json({
@@ -343,7 +344,7 @@ pedidosController.getNoDespachados = async (req, res) => {
           idEstado: 3,
           ingresoFH: {
             [Op.substring]: date,
-          }
+          },
         },
       });
 
@@ -369,17 +370,17 @@ pedidosController.getDetalleOrden = async (req, res) => {
       },
     });
 
-    result.forEach(element => {
-      const {id,idGestion, code, referencia, valor, cantidad} = element;
+    result.forEach((element) => {
+      const { id, idGestion, code, referencia, valor, cantidad } = element;
       const total = valor.toLocaleString("es-ES");
       data.push({
         id,
-        idGestion, 
-        code, 
-        referencia, 
-        valor: "$"+total, 
-        cantidad
-      })
+        idGestion,
+        code,
+        referencia,
+        valor: "$" + total,
+        cantidad,
+      });
     });
 
     return res.status(200).json({
@@ -418,25 +419,32 @@ pedidosController.getPdf = async (req, res) => {
           as: "fichacliente",
           attributes: ["nombreNegocio"],
           required: false,
-        }
+        },
       ],
       where: {
         id,
       },
     });
 
-    const { valorPedido,nit,savedBy,ingresoFH,distribuidor,asesordistribuidor } = result
+    const {
+      valorPedido,
+      nit,
+      savedBy,
+      ingresoFH,
+      distribuidor,
+      asesordistribuidor,
+    } = result;
     const total = valorPedido.toLocaleString("es-ES");
     data.push({
-      valorPedido: "$"+total,
+      valorPedido: "$" + total,
       nit,
       savedBy,
       ingresoFH,
       distribuidor,
       asesordistribuidor,
       estado: result.estados.name,
-      nombreNegocio:result.fichacliente.nombreNegocio
-    })
+      nombreNegocio: result.fichacliente.nombreNegocio,
+    });
 
     return res.status(200).json({
       data,
@@ -448,4 +456,58 @@ pedidosController.getPdf = async (req, res) => {
     });
   }
 };
+
+pedidosController.getAgente = async (req, res) => {
+  const distribuidor = req.distribuidor;
+  const profile = req.profile;
+  try {
+    if (profile == 5) {
+      let data = await appusers.findAll({
+        attributes: ["asesor", "email"],
+        where: {
+          distribuidor,
+        },
+      });
+      return res.status(200).json({
+        data,
+        message: "Datos obtenidos correctamente",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+pedidosController.getActualizarAgente = async (req, res) => {
+  const id = req.params.id;
+  const distribuidor = req.distribuidor;
+  const profile = req.profile;
+  const { asesordistribuidor } = req.body;
+  try {
+    if (profile == 5) {
+      let data = await gestiondiaria.update(
+        {
+          asesordistribuidor
+        },
+        {
+          where: {
+            id,
+            distribuidor,
+          },
+        }
+      );
+      return res.status(200).json({
+        data,
+        message: "Asesor Actualizado correctamente"
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
 module.exports = pedidosController;

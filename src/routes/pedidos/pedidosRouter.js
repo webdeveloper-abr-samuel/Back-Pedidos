@@ -18,5 +18,9 @@ router.get("/detalle/orden/:id", verifyToken, pedidosController.getDetalleOrden)
 //DATOS PARA EL PDF DE CADA PEDIDO
 router.get("/pdf/:id", verifyToken, pedidosController.getPdf);
 
+//Agentes
+router.get("/asesor/distri", verifyToken, pedidosController.getAgente);
+router.put("/asesor/distri/:id", verifyToken, pedidosController.getActualizarAgente);
+
 
 module.exports = router;

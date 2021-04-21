@@ -12,7 +12,8 @@ const isValidPassword = async (res,asesor,distribuidor,profile,password, hashDB)
                 res.status(200).json({
                     message: 'Autenticado con Exito',
                     token,
-                    asesor
+                    asesor,
+                    profile
                 });
             });
 
