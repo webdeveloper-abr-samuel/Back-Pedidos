@@ -1,4 +1,5 @@
 const gestiondiaria = require("../models").gestiondiaria;
+const detalleorden = require("../models").detalleorden;
 const db = require("../models");
 const { Op } = require("sequelize");
 statisticsDistributorController = {};
@@ -48,7 +49,6 @@ statisticsDistributorController.getChartLineal = async (req, res) => {
         where: {
           distribuidor,
           asesordistribuidor,
-          asesordistribuidor,
           ingresoFH: {
             [Op.substring]: fecha,
           },
@@ -59,7 +59,8 @@ statisticsDistributorController.getChartLineal = async (req, res) => {
         data,
         message: "Datos obtenidos correctamente",
       });
-    }       
+    }      
+    
   } catch (error) {
     return res.status(500).json({
       error: error.message,
