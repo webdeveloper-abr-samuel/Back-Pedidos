@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": null,
+    "password": "Abracol2014",
     "database": "abrageo",
-    "host": "127.0.0.1",
+    "host": "workflow",
     "dialect": "mysql"
   },
   "test": {

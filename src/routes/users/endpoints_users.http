@@ -4,11 +4,10 @@ GET http://localhost:3000/abrageo/users HTTP/1.1
 ###
 POST http://localhost:3000/abrageo/users HTTP/1.1
 Content-Type: application/json
-
 {
-    "asesor":"juan",
-    "distribuidor":"Hottostools", 
-    "email":"juan@correo.com",
-    "password":"123456",
+    "asesor":"Cindy Nayibe Miranda Nova",
+    "distribuidor":"SUMATEC",
+    "email":"auxiliar.callcenter1@sumatec.co",
+    "password":"1033784531*",
     "profile":4
 }
