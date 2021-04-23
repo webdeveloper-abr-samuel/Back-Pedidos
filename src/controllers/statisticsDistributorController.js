@@ -1,5 +1,4 @@
 const gestiondiaria = require("../models").gestiondiaria;
-const detalleorden = require("../models").detalleorden;
 const db = require("../models");
 const { Op } = require("sequelize");
 statisticsDistributorController = {};
@@ -20,11 +19,19 @@ function PieAsesor(distribuidor, asesor) {
   (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" ) as NoDespachado`
 }
 
+function ChartLinealAbracol(fecha) {
+  return `SELECT gestiondiaria.valorPedido, gestiondiaria.ingresoFH 
+          FROM gestiondiaria, detalleordens
+          WHERE gestiondiaria.id = detalleordens.idGestion AND gestiondiaria.ingresoFH LIKE "%${fecha}%"
+          GROUP BY detalleordens.idGestion`
+}
+
 statisticsDistributorController.getChartLineal = async (req, res) => {
   const distribuidor = req.distribuidor;
   const asesordistribuidor = req.asesor;
   const profile = req.profile;
   const { fecha } = req.body;
+  const query = ChartLinealAbracol(fecha);
   try {
     if (profile == 5) {
       let data = await gestiondiaria.findAll({
@@ -59,7 +66,16 @@ statisticsDistributorController.getChartLineal = async (req, res) => {
         data,
         message: "Datos obtenidos correctamente",
       });
-    }      
+    }       
+
+    if (profile != 4 && profile != 5) {
+      console.log('Entrando');
+      let result = await db.sequelize.query(query);
+      return res.status(200).json({
+        data: result[0],
+        message: "Datos obtenidos correctamente"
+      });
+    }
     
   } catch (error) {
     return res.status(500).json({
