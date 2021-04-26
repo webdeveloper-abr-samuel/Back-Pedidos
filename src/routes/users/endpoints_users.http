@@ -6,9 +6,9 @@ POST http://localhost:3000/abrageo/users HTTP/1.1
 Content-Type: application/json
 
 {
-    "asesor":"juan",
-    "distribuidor":"Hottostools", 
-    "email":"juan@correo.com",
+    "asesor":"mateo",
+    "distribuidor":"ABRACOL", 
+    "email":"mateo@abracol.com",
     "password":"123456",
-    "profile":4
+    "profile":1
 }
