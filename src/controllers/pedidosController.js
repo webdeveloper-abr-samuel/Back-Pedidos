@@ -489,7 +489,7 @@ pedidosController.getActualizarAgente = async (req, res) => {
     if (profile == 5) {
       let data = await gestiondiaria.update(
         {
-          asesordistribuidor
+          asesordistribuidor,
         },
         {
           where: {
@@ -500,7 +500,7 @@ pedidosController.getActualizarAgente = async (req, res) => {
       );
       return res.status(200).json({
         data,
-        message: "Asesor Actualizado correctamente"
+        message: "Asesor Actualizado correctamente",
       });
     }
   } catch (error) {

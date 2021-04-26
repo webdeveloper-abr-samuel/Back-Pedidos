@@ -56,8 +56,10 @@ module.exports = (sequelize, DataTypes) => {
     maLijS: DataTypes.STRING,
     numVerParPer: DataTypes.STRING,
     canal: DataTypes.STRING
-  }, {
+  }, 
+  {
     sequelize,
+    freezeTableName: true,
     modelName: 'fichacliente',
   });
   return fichacliente;

@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     obsDistribuidor: DataTypes.STRING
   }, {
     sequelize,
+    timestamps: false,
     modelName: 'gestiondiaria',
   });
   return gestiondiaria;
