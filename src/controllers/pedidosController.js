@@ -51,8 +51,6 @@ pedidosController.get = async(req, res) => {
                 },
             });
 
-
-            console.log(data)
             return res.status(200).json({
                 data,
                 message: "Datos obtenidos correctamente",
@@ -90,7 +88,6 @@ pedidosController.get = async(req, res) => {
                     }
                 },
             });
-            console.log(data)
             return res.status(200).json({
                 data,
                 message: "Datos obtenidos correctamente",
@@ -127,7 +124,6 @@ pedidosController.get = async(req, res) => {
                     }
                 },
             });
-            console.log(data)
             return res.status(200).json({
                 data,
                 message: "Datos obtenidos correctamente",
@@ -690,7 +686,6 @@ pedidosController.getAgente = async(req, res) => {
             });
         }
     } catch (error) {
-        console.log(error)
         return res.status(500).json({
             error: error.message,
         });
