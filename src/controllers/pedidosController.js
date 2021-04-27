@@ -2,60 +2,55 @@ const gestiondiaria = require("../models").gestiondiaria;
 const detalleorden = require("../models").detalleorden;
 const fichacliente = require("../models").fichacliente;
 const appusers = require("../models").appusers;
-const estados = require("../models").estados;
-const Sequelize = require("sequelize");
-const Op = Sequelize.Op;
+const { Op } = require("sequelize");
+const db = require("../models");
 pedidosController = {};
 
-pedidosController.get = async(req, res) => {
-    const distribuidor = req.distribuidor;
-    const asesordistribuidor = req.asesor;
-    const profile = req.profile;
+function Notifications(distribuidor) {
+  return `SELECT * FROM detalleordens, gestiondiaria 
+  WHERE gestiondiaria.id = detalleordens.idGestion AND gestiondiaria.distribuidor = '${distribuidor}'
+  GROUP BY detalleordens.idGestion 
+  ORDER BY gestiondiaria.id DESC 
+  LIMIT 0,5`;
+}
 
-    var f = new Date();
-    const mes = f.getMonth() + 1;
-    const mesActual = mes < 10 ? `0${mes}` : mes;
-    var date = f.getFullYear() + "-" + mesActual;
-    try {
-        if (profile == 5) {
-            let data = await gestiondiaria.findAll({
-                attributes: [
-                    'id',
-                    'nit',
-                    'savedBy',
-                    'asesordistribuidor',
-                    'distribuidor',
-                    'valorPedido', [Sequelize.fn('date_format', Sequelize.col('ingresoFH'), '%Y-%m-%d %H:%i'), 'ingresoFH']
-                ],
-                include: [{
-                        model: estados,
-                        as: "estados",
-                        attributes: ["name"],
-                        required: false,
-                    },
-                    {
-                        model: fichacliente,
-                        as: "fichacliente",
-                        attributes: ["nombreNegocio"],
-                        required: false,
-                    },
-                ],
-                where: {
-                    distribuidor,
-                    asesordistribuidor: {
-                        [Op.not]: null,
-                    },
-                    ingresoFH: {
-                        [Op.substring]: date,
-                    }
-                },
-            });
-
-            return res.status(200).json({
-                data,
-                message: "Datos obtenidos correctamente",
-            });
-        }
+pedidosController.get = async (req, res) => {
+  const distribuidor = req.distribuidor;
+  const asesordistribuidor = req.asesor;
+  const profile = req.profile;
+  var f = new Date();
+  const mes = f.getMonth() + 1;
+  const mesActual = mes < 10 ? `0${mes}` : mes;
+  var date = f.getFullYear() + "-" + mesActual;
+  try {
+    if (profile == 5) {
+      let data = await gestiondiaria.findAll({
+        include: [
+          {
+            model: estados,
+            as: "estados",
+            attributes: ["name"],
+            required: false,
+          },
+          {
+            model: fichacliente,
+            as: "fichacliente",
+            attributes: ["nombreNegocio"],
+            required: false,
+          },
+        ],
+        where: {
+          distribuidor,
+          ingresoFH: {
+            [Op.substring]: date,
+          },
+        },
+      });
+      return res.status(200).json({
+        data,
+        message: "Datos obtenidos correctamente",
+      });
+    }
 
         if (profile == 4) {
             let data = await gestiondiaria.findAll({
@@ -717,6 +712,22 @@ pedidosController.getActualizarAgente = async(req, res) => {
             error: error.message,
         });
     }
+};
+
+pedidosController.getNotification = async (req, res) => {
+  const distribuidor = req.distribuidor;
+  const queryNotificacionAdmin = Notifications(distribuidor);
+  try {
+    let result = await db.sequelize.query(queryNotificacionAdmin);
+    return res.status(200).json({
+      data : result[0],
+      message: "Datos obtenidos correctamente",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
 };
 
 module.exports = pedidosController;

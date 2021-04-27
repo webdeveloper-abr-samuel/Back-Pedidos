@@ -1,7 +1,4 @@
-const gestiondiaria = require("../models").gestiondiaria;
-const detalleorden = require("../models").detalleorden;
 const db = require("../models");
-const { Op, Sequelize } = require("sequelize");
 statisticsDistributorController = {};
 
 function PieDistributor(distribuidor) {
