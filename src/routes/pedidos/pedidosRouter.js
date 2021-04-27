@@ -22,5 +22,8 @@ router.get("/pdf/:id", verifyToken, pedidosController.getPdf);
 router.get("/asesor/distri", verifyToken, pedidosController.getAgente);
 router.put("/asesor/distri/:id", verifyToken, pedidosController.getActualizarAgente);
 
+//Notifications
+router.get("/distri/notifications", verifyToken, pedidosController.getNotification);
+
 
 module.exports = router;

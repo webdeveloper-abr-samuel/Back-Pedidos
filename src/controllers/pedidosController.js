@@ -4,7 +4,16 @@ const fichacliente = require("../models").fichacliente;
 const estados = require("../models").estados;
 const appusers = require("../models").appusers;
 const { Op } = require("sequelize");
+const db = require("../models");
 pedidosController = {};
+
+function Notifications(distribuidor) {
+  return `SELECT * FROM detalleordens, gestiondiaria 
+  WHERE gestiondiaria.id = detalleordens.idGestion AND gestiondiaria.distribuidor = '${distribuidor}'
+  GROUP BY detalleordens.idGestion 
+  ORDER BY gestiondiaria.id DESC 
+  LIMIT 0,5`;
+}
 
 pedidosController.get = async (req, res) => {
   const distribuidor = req.distribuidor;
@@ -503,6 +512,22 @@ pedidosController.getActualizarAgente = async (req, res) => {
         message: "Asesor Actualizado correctamente",
       });
     }
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+pedidosController.getNotification = async (req, res) => {
+  const distribuidor = req.distribuidor;
+  const queryNotificacionAdmin = Notifications(distribuidor);
+  try {
+    let result = await db.sequelize.query(queryNotificacionAdmin);
+    return res.status(200).json({
+      data : result[0],
+      message: "Datos obtenidos correctamente",
+    });
   } catch (error) {
     return res.status(500).json({
       error: error.message,
