@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 4000;
 
 //Routes
 const routes = require('./routes');
-app.use(express.static(__dirname + '/public'))
+app.use('/', express.static(__dirname + '/public'))
 routes(app);
 
 app.listen(PORT, () => {

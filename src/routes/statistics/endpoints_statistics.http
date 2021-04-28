@@ -1,6 +1,6 @@
 ###
 POST    http://localhost:3000/abrageo/statistic/distributor/Lineal HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJIb3R0b3N0b29scyIsImRpc3RyaWJ1aWRvciI6IkhvdHRvc3Rvb2xzIiwicHJvZmlsZSI6NSwiZXhwaXJlc0luIjoiMWQiLCJpYXQiOjE2MTk0NzI2OTh9.rNeyGItuaBrNz2e56SU9Xi-xpXjMbdteihLCTh3dzbs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJtYXRlbyIsImRpc3RyaWJ1aWRvciI6IkFCUkFDT0wiLCJwcm9maWxlIjoxLCJleHBpcmVzSW4iOiIxZCIsImlhdCI6MTYxOTQ0NjA1Nn0.vFHRAvhRL7l_xvmdFJUD0olyyqIZE7SM_w-AT3puMpY
 content-type: application/json
 
 {

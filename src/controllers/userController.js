@@ -17,7 +17,7 @@ userController.get = async (req, res) => {
 };
 
 userController.post = async (req, res) => {
-  const { email, password, asesor, distribuidor } = req.body;
+  const { email, password, asesor, distribuidor,profile } = req.body;
 
   const hash = await bcrypt.hash(password, 12);
 
@@ -27,7 +27,7 @@ userController.post = async (req, res) => {
       distribuidor,
       email,
       password: hash,
-      profile: 1,
+      profile,
     });
     return res.status(200).json({
       message: "Usuario Guardado Exitosamente",

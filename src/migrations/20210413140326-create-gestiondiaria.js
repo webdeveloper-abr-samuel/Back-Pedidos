@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       valorPedido: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       obsVenta: {
         type: Sequelize.STRING
