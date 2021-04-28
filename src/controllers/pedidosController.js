@@ -2,55 +2,72 @@ const gestiondiaria = require("../models").gestiondiaria;
 const detalleorden = require("../models").detalleorden;
 const fichacliente = require("../models").fichacliente;
 const appusers = require("../models").appusers;
-const { Op } = require("sequelize");
+const estados = require("../models").estados;
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 const db = require("../models");
 pedidosController = {};
 
+
 function Notifications(distribuidor) {
-  return `SELECT * FROM detalleordens, gestiondiaria 
+  return `SELECT detalleordens.idGestion, detalleordens.idGestion as id  FROM detalleordens, gestiondiaria 
   WHERE gestiondiaria.id = detalleordens.idGestion AND gestiondiaria.distribuidor = '${distribuidor}'
   GROUP BY detalleordens.idGestion 
   ORDER BY gestiondiaria.id DESC 
   LIMIT 0,5`;
 }
 
-pedidosController.get = async (req, res) => {
-  const distribuidor = req.distribuidor;
-  const asesordistribuidor = req.asesor;
-  const profile = req.profile;
-  var f = new Date();
-  const mes = f.getMonth() + 1;
-  const mesActual = mes < 10 ? `0${mes}` : mes;
-  var date = f.getFullYear() + "-" + mesActual;
-  try {
-    if (profile == 5) {
-      let data = await gestiondiaria.findAll({
-        include: [
-          {
-            model: estados,
-            as: "estados",
-            attributes: ["name"],
-            required: false,
-          },
-          {
-            model: fichacliente,
-            as: "fichacliente",
-            attributes: ["nombreNegocio"],
-            required: false,
-          },
-        ],
-        where: {
-          distribuidor,
-          ingresoFH: {
-            [Op.substring]: date,
-          },
-        },
-      });
-      return res.status(200).json({
-        data,
-        message: "Datos obtenidos correctamente",
-      });
-    }
+pedidosController.get = async(req, res) => {
+    const distribuidor = req.distribuidor;
+    const asesordistribuidor = req.asesor;
+    const profile = req.profile;
+
+    var f = new Date();
+    const mes = f.getMonth() + 1;
+    const mesActual = mes < 10 ? `0${mes}` : mes;
+    var date = f.getFullYear() + "-" + mesActual;
+    try {
+        if (profile == 5) {
+            let data = await gestiondiaria.findAll({
+                attributes: [
+                    'id',
+                    'nit',
+                    'savedBy',
+                    'asesordistribuidor',
+                    'distribuidor',
+                    'valorPedido', [Sequelize.fn('date_format', Sequelize.col('ingresoFH'), '%Y-%m-%d %H:%i'), 'ingresoFH']
+                ],
+                include: [{
+                        model: estados,
+                        as: "estados",
+                        attributes: ["name"],
+                        required: false,
+                    },
+                    {
+                        model: fichacliente,
+                        as: "fichacliente",
+                        attributes: ["nombreNegocio"],
+                        required: false,
+                    },
+                ],
+                where: {
+                    distribuidor,
+                    asesordistribuidor: {
+                        [Op.not]: null,
+                    },
+                    ingresoFH: {
+                        [Op.substring]: date,
+                    }
+                },
+            });
+
+
+            console.log(data)
+            return res.status(200).json({
+                data,
+                message: "Datos obtenidos correctamente",
+            });
+        }
 
         if (profile == 4) {
             let data = await gestiondiaria.findAll({
@@ -83,42 +100,7 @@ pedidosController.get = async (req, res) => {
                     }
                 },
             });
-            return res.status(200).json({
-                data,
-                message: "Datos obtenidos correctamente",
-            });
-        }
-
-        if (profile != 4 && profile != 5) {
-            let data = await gestiondiaria.findAll({
-                attributes: [
-                    'id',
-                    'nit',
-                    'savedBy',
-                    'asesordistribuidor',
-                    'distribuidor',
-                    'valorPedido', [Sequelize.fn('date_format', Sequelize.col('ingresoFH'), '%Y-%m-%d %H:%i'), 'ingresoFH']
-                ],
-                include: [{
-                        model: estados,
-                        as: "estados",
-                        attributes: ["name"],
-                        required: false,
-                    },
-                    {
-                        model: fichacliente,
-                        as: "fichacliente",
-                        attributes: ["nombreNegocio"],
-                        required: false,
-                    },
-                ],
-                where: {
-                    distribuidor,
-                    ingresoFH: {
-                        [Op.substring]: date,
-                    }
-                },
-            });
+            console.log(data)
             return res.status(200).json({
                 data,
                 message: "Datos obtenidos correctamente",
@@ -261,43 +243,6 @@ pedidosController.getProceso = async(req, res) => {
                 message: "Datos obtenidos correctamente",
             });
         }
-
-        if (profile != 4 && profile != 5) {
-            let data = await gestiondiaria.findAll({
-                attributes: [
-                    'id',
-                    'nit',
-                    'savedBy',
-                    'asesordistribuidor',
-                    'distribuidor',
-                    'valorPedido', [Sequelize.fn('date_format', Sequelize.col('ingresoFH'), '%Y-%m-%d %H:%i'), 'ingresoFH']
-                ],
-                include: [{
-                        model: estados,
-                        as: "estados",
-                        attributes: ["name"],
-                        required: false,
-                    },
-                    {
-                        model: fichacliente,
-                        as: "fichacliente",
-                        attributes: ["nombreNegocio"],
-                        required: false,
-                    },
-                ],
-                where: {
-                    idEstado: 1,
-                    ingresoFH: {
-                        [Op.substring]: date,
-                    }
-                },
-            });
-
-            return res.status(200).json({
-                data,
-                message: "Datos obtenidos correctamente",
-            });
-        }
     } catch (error) {
         return res.status(500).json({
             error: error.message,
@@ -378,43 +323,6 @@ pedidosController.getDespachados = async(req, res) => {
                 where: {
                     distribuidor,
                     asesordistribuidor,
-                    idEstado: 2,
-                    ingresoFH: {
-                        [Op.substring]: date,
-                    }
-                },
-            });
-
-            return res.status(200).json({
-                data,
-                message: "Datos obtenidos correctamente",
-            });
-        }
-
-        if (profile != 4 && profile != 5) {
-            let data = await gestiondiaria.findAll({
-                attributes: [
-                    'id',
-                    'nit',
-                    'savedBy',
-                    'asesordistribuidor',
-                    'distribuidor',
-                    'valorPedido', [Sequelize.fn('date_format', Sequelize.col('ingresoFH'), '%Y-%m-%d %H:%i'), 'ingresoFH']
-                ],
-                include: [{
-                        model: estados,
-                        as: "estados",
-                        attributes: ["name"],
-                        required: false,
-                    },
-                    {
-                        model: fichacliente,
-                        as: "fichacliente",
-                        attributes: ["nombreNegocio"],
-                        required: false,
-                    },
-                ],
-                where: {
                     idEstado: 2,
                     ingresoFH: {
                         [Op.substring]: date,
@@ -532,43 +440,6 @@ pedidosController.getNoDespachados = async(req, res) => {
                 message: "Datos obtenidos correctamente",
             });
         }
-
-        if (profile != 4 && profile != 5) {
-            let data = await gestiondiaria.findAll({
-                attributes: [
-                    'id',
-                    'nit',
-                    'savedBy',
-                    'asesordistribuidor',
-                    'distribuidor',
-                    'valorPedido', [Sequelize.fn('date_format', Sequelize.col('ingresoFH'), '%Y-%m-%d %H:%i'), 'ingresoFH']
-                ],
-                include: [{
-                        model: estados,
-                        as: "estados",
-                        attributes: ["name"],
-                        required: false,
-                    },
-                    {
-                        model: fichacliente,
-                        as: "fichacliente",
-                        attributes: ["nombreNegocio"],
-                        required: false,
-                    },
-                ],
-                where: {
-                    idEstado: 3,
-                    ingresoFH: {
-                        [Op.substring]: date,
-                    }
-                },
-            });
-
-            return res.status(200).json({
-                data,
-                message: "Datos obtenidos correctamente",
-            });
-        }
     } catch (error) {
         return res.status(500).json({
             error: error.message,
@@ -665,6 +536,7 @@ pedidosController.getPdf = async(req, res) => {
 };
 
 pedidosController.getAgente = async(req, res) => {
+    console.log(req)
     const distribuidor = req.distribuidor;
     const profile = req.profile;
     try {
@@ -681,6 +553,7 @@ pedidosController.getAgente = async(req, res) => {
             });
         }
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             error: error.message,
         });

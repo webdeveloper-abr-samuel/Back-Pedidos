@@ -83,7 +83,7 @@ statisticsDistributorController.getChartLineal = async (req, res) => {
           };
           data.push(res[value.dia]);
         }
-        res[value.dia].valorPedido += value.valorPedido;
+        res[value.dia].valorPedido += parseInt(value.valorPedido);
         return res;
       }, {});
 
@@ -104,7 +104,7 @@ statisticsDistributorController.getChartLineal = async (req, res) => {
           };
           data.push(res[value.dia]);
         }
-        res[value.dia].valorPedido += value.valorPedido;
+        res[value.dia].valorPedido += parseInt(value.valorPedido);
         return res;
       }, {});
 
@@ -123,7 +123,7 @@ statisticsDistributorController.getChartLineal = async (req, res) => {
           res[value.dia] = { ingresoFH: value.dia, valorPedido: 0 };
           data.push(res[value.dia]);
         }
-        res[value.dia].valorPedido += value.valorPedido;
+        res[value.dia].valorPedido += parseInt(value.valorPedido);
         return res;
       }, {});
 
