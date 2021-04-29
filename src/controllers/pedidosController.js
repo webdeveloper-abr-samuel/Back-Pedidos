@@ -722,12 +722,13 @@ pedidosController.getPdf = async(req, res) => {
             },
         });
 
+
         const { valorPedido, nit, savedBy, ingresoFH, distribuidor, asesordistribuidor } = result
-        const total = valorPedido.toLocaleString("es-ES");
+        const total = Descryp(valorPedido).toLocaleString("es-ES");
         data.push({
             valorPedido: "$" + total,
-            nit,
-            savedBy,
+            nit: Descryp(nit), 
+            savedBy : Descryp(savedBy),
             ingresoFH,
             distribuidor,
             asesordistribuidor,

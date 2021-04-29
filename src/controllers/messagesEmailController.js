@@ -27,6 +27,26 @@ messagesEmailController.post =  (req, res) => {
     })
 }
 
+
+messagesEmailController.postMessages =  (req, res) => {
+    const { email , subject, text } = req.body
+
+    //Step 2
+    let mailOptions = {
+        from: 'comunicaciones.abracol@abracol.com', //de 
+        to: "contacto@abracol.com", //hacia
+        subject,
+        text: `
+            correo del usuario : ${email}
+            Descripcion : ${text}
+        `
+    };
+    result(mailOptions, res)
+    return res.status(200).json({
+        message: 'Mensaje enviado Exitosamente 📩'
+    })
+}
+
 //Step 3
 const result = (mailOptions, res) => {
     transporter.sendMail(mailOptions, (error, data) => {
