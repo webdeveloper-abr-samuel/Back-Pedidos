@@ -24,10 +24,7 @@ pedidosController.get = async(req, res) => {
     const distribuidor = req.distribuidor;
     const asesordistribuidor = req.asesor;
     const profile = req.profile;
-    var f = new Date();
-    const mes = f.getMonth() + 1;
-    const mesActual = mes < 10 ? `0${mes}` : mes;
-    var date = f.getFullYear() + "-" + mesActual;
+    const { fecha } = req.body;
     try {
         if (profile == 5) {
             let data = [];
@@ -59,7 +56,7 @@ pedidosController.get = async(req, res) => {
                         [Op.not]: null,
                     },
                     ingresoFH: {
-                        [Op.substring]: date,
+                        [Op.substring]: fecha,
                     }
                 },
             });
@@ -123,7 +120,7 @@ pedidosController.get = async(req, res) => {
                     distribuidor,
                     asesordistribuidor,
                     ingresoFH: {
-                        [Op.substring]: date,
+                        [Op.substring]: fecha,
                     }
                 },
             });
@@ -223,11 +220,7 @@ pedidosController.getProceso = async(req, res) => {
     const distribuidor = req.distribuidor;
     const asesordistribuidor = req.asesor;
     const profile = req.profile;
-    var f = new Date();
-    const mes = f.getMonth() + 1;
-    const mesActual = mes < 10 ? `0${mes}` : mes;
-    var date = f.getFullYear() + "-" + mesActual;
-
+    const { fecha } = req.body;
     try {
         if (profile == 5) {
             let data = [];
@@ -257,7 +250,7 @@ pedidosController.getProceso = async(req, res) => {
                     distribuidor,
                     idEstado: 1,
                     ingresoFH: {
-                        [Op.substring]: date,
+                        [Op.substring]: fecha,
                     }
                 },
             });
@@ -323,7 +316,7 @@ pedidosController.getProceso = async(req, res) => {
                     asesordistribuidor,
                     idEstado: 1,
                     ingresoFH: {
-                        [Op.substring]: date,
+                        [Op.substring]: fecha,
                     }
                 },
             });
@@ -370,11 +363,7 @@ pedidosController.getDespachados = async(req, res) => {
     const distribuidor = req.distribuidor;
     const asesordistribuidor = req.asesor;
     const profile = req.profile;
-    var f = new Date();
-    const mes = f.getMonth() + 1;
-    const mesActual = mes < 10 ? `0${mes}` : mes;
-    var date = f.getFullYear() + "-" + mesActual;
-
+    const { fecha } = req.body;
     try {
         if (profile == 5) {
             let data = [];
@@ -404,7 +393,7 @@ pedidosController.getDespachados = async(req, res) => {
                     distribuidor,
                     idEstado: 2,
                     ingresoFH: {
-                        [Op.substring]: date,
+                        [Op.substring]: fecha,
                     }
                 },
             });
@@ -470,7 +459,7 @@ pedidosController.getDespachados = async(req, res) => {
                     asesordistribuidor,
                     idEstado: 2,
                     ingresoFH: {
-                        [Op.substring]: date,
+                        [Op.substring]: fecha,
                     }
                 },
             });
@@ -517,11 +506,7 @@ pedidosController.getNoDespachados = async(req, res) => {
     const distribuidor = req.distribuidor;
     const asesordistribuidor = req.asesor;
     const profile = req.profile;
-    var f = new Date();
-    const mes = f.getMonth() + 1;
-    const mesActual = mes < 10 ? `0${mes}` : mes;
-    var date = f.getFullYear() + "-" + mesActual;
-
+    const { fecha } = req.body;
     try {
         if (profile == 5) {
             let data = [];
@@ -551,7 +536,7 @@ pedidosController.getNoDespachados = async(req, res) => {
                     distribuidor,
                     idEstado: 3,
                     ingresoFH: {
-                        [Op.substring]: date,
+                        [Op.substring]: fecha,
                     }
                 },
             });
@@ -617,7 +602,7 @@ pedidosController.getNoDespachados = async(req, res) => {
                     asesordistribuidor,
                     idEstado: 3,
                     ingresoFH: {
-                        [Op.substring]: date,
+                        [Op.substring]: fecha,
                     }
                 },
             });

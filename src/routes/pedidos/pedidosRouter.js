@@ -7,10 +7,10 @@ router.get("/:id", verifyToken, pedidosController.getById);
 router.put("/:id", verifyToken, pedidosController.update);
 
 //ESTADO DE PEDIDOS
-router.get("/", verifyToken, pedidosController.get);
-router.get("/en/proceso", verifyToken, pedidosController.getProceso);
-router.get("/en/despacho", verifyToken, pedidosController.getDespachados);
-router.get("/cancelado/despacho", verifyToken, pedidosController.getNoDespachados);
+router.post("/", verifyToken, pedidosController.get);
+router.post("/en/proceso", verifyToken, pedidosController.getProceso);
+router.post("/en/despacho", verifyToken, pedidosController.getDespachados);
+router.post("/cancelado/despacho", verifyToken, pedidosController.getNoDespachados);
 
 //DETALLES DEL PEDIDO
 router.get("/detalle/orden/:id", verifyToken, pedidosController.getDetalleOrden);
