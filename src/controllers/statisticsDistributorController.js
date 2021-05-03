@@ -144,12 +144,9 @@ statisticsDistributorController.getChartLineal = async (req, res) => {
 statisticsDistributorController.getChartPie = async (req, res) => {
   const distribuidor = req.distribuidor;
   const asesordistribuidor = req.asesor;
-  var f = new Date();
-  const mes = f.getMonth() + 1;
-  const mesActual = mes < 10 ? `0${mes}` : mes;
-  var date = f.getFullYear() + "-" + mesActual;
-  const queryDistributor = PieDistributor(distribuidor,date);
-  const queryAsesor = PieAsesor(distribuidor, asesordistribuidor,date);
+  const { fecha } = req.body;
+  const queryDistributor = PieDistributor(distribuidor,fecha);
+  const queryAsesor = PieAsesor(distribuidor, asesordistribuidor,fecha);
   const queryAsesorAbracol = PieAsesorAbracol();
 
   const profile = req.profile;
