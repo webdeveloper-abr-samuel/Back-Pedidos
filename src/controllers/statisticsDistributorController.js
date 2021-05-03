@@ -1,20 +1,20 @@
 const db = require("../models");
 statisticsDistributorController = {};
 
-function PieDistributor(distribuidor) {
-  return `SELECT 	(SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 ) as Proceso,
-                  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 ) as Despachado,
-                  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 ) as NoDespachado
+function PieDistributor(distribuidor, fecha) {
+  return `SELECT 	(SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Proceso,
+                  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Despachado,
+                  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as NoDespachado
           FROM 	gestiondiaria
           WHERE 	gestiondiaria.distribuidor = "${distribuidor}"
           GROUP BY gestiondiaria.distribuidor`;
 }
 
-function PieAsesor(distribuidor, asesor) {
+function PieAsesor(distribuidor, asesor, fecha) {
   return `SELECT 	
-  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" ) as Proceso,
-  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" ) as Despachado,
-  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" ) as NoDespachado`;
+  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Proceso,
+  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Despachado,
+  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as NoDespachado`;
 }
 
 function PieAsesorAbracol() {
@@ -143,8 +143,12 @@ statisticsDistributorController.getChartLineal = async (req, res) => {
 statisticsDistributorController.getChartPie = async (req, res) => {
   const distribuidor = req.distribuidor;
   const asesordistribuidor = req.asesor;
-  const queryDistributor = PieDistributor(distribuidor);
-  const queryAsesor = PieAsesor(distribuidor, asesordistribuidor);
+  var f = new Date();
+  const mes = f.getMonth() + 1;
+  const mesActual = mes < 10 ? `0${mes}` : mes;
+  var date = f.getFullYear() + "-" + mesActual;
+  const queryDistributor = PieDistributor(distribuidor,date);
+  const queryAsesor = PieAsesor(distribuidor, asesordistribuidor,date);
   const queryAsesorAbracol = PieAsesorAbracol();
 
   const profile = req.profile;
