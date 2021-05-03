@@ -10,9 +10,11 @@ const db = require("../models");
 pedidosController = {};
 
 
-function Notifications(distribuidor) {
+function Notifications(distribuidor, fecha) {
   return `SELECT detalleordens.idGestion, detalleordens.idGestion as id  FROM detalleordens, gestiondiaria 
-  WHERE gestiondiaria.id = detalleordens.idGestion AND gestiondiaria.distribuidor = '${distribuidor}'
+  WHERE gestiondiaria.id = detalleordens.idGestion 
+  AND gestiondiaria.distribuidor = '${distribuidor}'
+  AND gestiondiaria.ingresoFH LIKE "%${fecha}%"
   GROUP BY detalleordens.idGestion 
   ORDER BY gestiondiaria.id DESC 
   LIMIT 0,5`;
@@ -801,7 +803,11 @@ pedidosController.getActualizarAgente = async(req, res) => {
 
 pedidosController.getNotification = async (req, res) => {
   const distribuidor = req.distribuidor;
-  const queryNotificacionAdmin = Notifications(distribuidor);
+  var f = new Date();
+  const mes = f.getMonth() + 1;
+  const mesActual = mes < 10 ? `0${mes}` : mes;
+  var date = f.getFullYear() + "-" + mesActual;
+  const queryNotificacionAdmin = Notifications(distribuidor,date);
   try {
     let result = await db.sequelize.query(queryNotificacionAdmin);
     return res.status(200).json({

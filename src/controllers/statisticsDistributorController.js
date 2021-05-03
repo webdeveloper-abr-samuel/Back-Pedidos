@@ -2,9 +2,10 @@ const db = require("../models");
 statisticsDistributorController = {};
 
 function PieDistributor(distribuidor, fecha) {
-  return `SELECT 	(SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Proceso,
-                  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Despachado,
-                  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as NoDespachado
+  return `SELECT 	
+          (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Proceso,
+          (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Despachado,
+          (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as NoDespachado
           FROM 	gestiondiaria
           WHERE 	gestiondiaria.distribuidor = "${distribuidor}"
           GROUP BY gestiondiaria.distribuidor`;
