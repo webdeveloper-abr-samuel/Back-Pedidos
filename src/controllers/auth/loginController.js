@@ -63,9 +63,14 @@ LoginController.login = async(req, res) => {
 
 LoginController.update = async(req, res) => {
     const { email } = req.body;
+    var hoy = new Date();
+    var fecha = hoy.getFullYear()+'-'+(hoy.getMonth()+1)+'-'+hoy.getDate();
+    var hora = (hoy.getUTCHours()-5)+':'+hoy.getMinutes();
+    var fechaYHora = fecha+' '+hora;
     try {
         let data = await appusers.update({
-            contrato: 1
+            contrato: 1,
+            fechacontrato: fechaYHora
         }, {
             where: {
                 email
