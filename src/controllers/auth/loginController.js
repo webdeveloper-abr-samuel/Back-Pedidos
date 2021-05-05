@@ -26,23 +26,28 @@ const isValidPassword = async(res, asesor, distribuidor, profile, password, hash
     return compare
 }
 
-
 LoginController.login = async(req, res) => {
     const { email, password } = req.body
     try {
         let result = await appusers.findOne({
-            attributes: ['email', 'password', 'asesor', 'distribuidor', 'profile'],
+            attributes: ['email', 'password', 'asesor', 'distribuidor', 'profile','contrato'],
             where: {
                 email
             }
         });
 
         if (result != undefined) {
-            const passworBD = result.password;
-            const asesor = result.asesor;
-            const profile = result.profile;
-            const distribuidor = result.distribuidor
-            isValidPassword(res, asesor, distribuidor, profile, password, passworBD);
+            if (result.contrato == true) {
+                const passworBD = result.password;
+                const asesor = result.asesor;
+                const profile = result.profile;
+                const distribuidor = result.distribuidor
+                isValidPassword(res, asesor, distribuidor, profile, password, passworBD);
+            }else {
+                return res.status(401).json({
+                    message: 'Acepte nuestras politicas sobre el manejo de datos para continuar'
+                });
+            }
         } else {
             return res.status(401).json({
                 message: 'Correo Invalido'
@@ -55,5 +60,46 @@ LoginController.login = async(req, res) => {
         });
     }
 }
+
+LoginController.update = async(req, res) => {
+    const { email } = req.body;
+    try {
+        let data = await appusers.update({
+            contrato: 1
+        }, {
+            where: {
+                email
+            },
+        });
+        return res.status(200).json({
+            data,
+            message: "Dato Actualizado correctamente",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+};
+
+LoginController.postTerminos = async(req, res) => {
+    const { email } = req.body;
+    try {
+        let data = await appusers.findOne({
+            attributes: ["contrato"],
+            where: {
+                email,
+            },
+        });
+        return res.status(200).json({
+            data,
+            message: "Datos correctamente",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+};
 
 module.exports = LoginController;

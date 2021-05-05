@@ -24,6 +24,9 @@ module.exports = {
       profile: {
         type: Sequelize.FLOAT
       },
+      contrato:{
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -2,26 +2,30 @@ const db = require("../models");
 statisticsDistributorController = {};
 
 function PieDistributor(distribuidor, fecha) {
-  return `SELECT 	
-          (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Proceso,
-          (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Despachado,
-          (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as NoDespachado
+  return `SELECT 
+          count(Case idEstado when 1 then id end) as Proceso,
+          count(Case idEstado when 2 then id end) as Despachado,
+          count(Case idEstado when 3 then id end) as NoDespachado
           FROM 	gestiondiaria
-          WHERE 	gestiondiaria.distribuidor = "${distribuidor}"
+          WHERE 	gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.ingresoFH LIKE '%${fecha}%'
           GROUP BY gestiondiaria.distribuidor`;
 }
 
 function PieAsesor(distribuidor, asesor, fecha) {
-  return `SELECT 	
-  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Proceso,
-  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as Despachado,
-  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 AND gestiondiaria.distribuidor = "${distribuidor}" AND gestiondiaria.asesordistribuidor = "${asesor}" AND gestiondiaria.ingresoFH LIKE "%${fecha}%" ) as NoDespachado`;
+  return `SELECT count(Case idEstado when 1 then id end) as Proceso,
+          count(Case idEstado when 2 then id end) as Despachado,
+          count(Case idEstado when 3 then id end) as NoDespachado
+          FROM 	gestiondiaria
+          WHERE gestiondiaria.distribuidor = "${distribuidor}" 
+          AND gestiondiaria.asesordistribuidor = "${asesor}" 
+          AND gestiondiaria.ingresoFH LIKE '%${fecha}%'
+          GROUP BY gestiondiaria.distribuidor`;
 }
 
 function PieAsesorAbracol() {
-  return `SELECT 	(SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 1 ) as Proceso,
-                  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 2 ) as Despachado,
-                  (SELECT COUNT(*) FROM gestiondiaria  WHERE gestiondiaria.idEstado = 3 ) as NoDespachado
+  return `SELECT 	count(Case idEstado when 1 then id end) as Proceso,
+          count(Case idEstado when 2 then id end) as Despachado,
+          count(Case idEstado when 3 then id end) as NoDespachado
           FROM gestiondiaria, detalleordens
           WHERE gestiondiaria.id = detalleordens.idGestion
           GROUP BY gestiondiaria.idCliente`;

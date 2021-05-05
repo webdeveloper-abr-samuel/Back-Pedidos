@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       profile: DataTypes.FLOAT,
+      contrato: DataTypes.BOOLEAN,
     },
     {
       sequelize,
