@@ -20,6 +20,10 @@ function Notifications(distribuidor, fecha) {
   LIMIT 0,5`;
 }
 
+function Departamento() {
+    return `SELECT states.name FROM states`;
+}
+
 pedidosController.get = async(req, res) => {
     const distribuidor = req.distribuidor;
     const asesordistribuidor = req.asesor;
@@ -805,5 +809,6 @@ pedidosController.getNotification = async (req, res) => {
     });
   }
 };
+
 
 module.exports = pedidosController;

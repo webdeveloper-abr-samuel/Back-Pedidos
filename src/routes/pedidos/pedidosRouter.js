@@ -25,5 +25,4 @@ router.put("/asesor/distri/:id", verifyToken, pedidosController.getActualizarAge
 //Notifications
 router.get("/distri/notifications", verifyToken, pedidosController.getNotification);
 
-
 module.exports = router;
