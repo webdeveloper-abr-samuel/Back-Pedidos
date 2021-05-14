@@ -19,7 +19,7 @@ const isValidPassword = async(res, asesor, distribuidor, profile, password, hash
 
         } else {
             res.status(401).json({
-                message: 'Contraseña Invalida'
+                message: 'Usuario o Contraseña Invalido'
             })
         }
     });
@@ -50,7 +50,7 @@ LoginController.login = async(req, res) => {
             }
         } else {
             return res.status(401).json({
-                message: 'Correo Invalido'
+                message: 'Usuario o Contraseña Invalido'
             });
         }
 
