@@ -7,4 +7,5 @@ router.post("/Lineal", verifyToken, statisticsDistributorController.getChartLine
 router.get("/States", verifyToken, statisticsDistributorController.getChartStates);
 router.post("/Pie", verifyToken, statisticsDistributorController.getChartPie);
 
+
 module.exports = router;

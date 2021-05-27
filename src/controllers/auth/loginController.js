@@ -16,7 +16,6 @@ const isValidPassword = async(res, asesor, distribuidor, profile, password, hash
                     profile
                 });
             });
-
         } else {
             res.status(401).json({
                 message: 'Usuario o Contraseña Invalido'
@@ -88,21 +87,33 @@ LoginController.update = async(req, res) => {
 };
 
 LoginController.postTerminos = async(req, res) => {
-    const { email } = req.body;
+    const { email,password } = req.body;
+    let textContent = password.toString();
+    
+    
     try {
         let data = await appusers.findOne({
-            attributes: ["contrato"],
+            attributes: ["contrato", "password"],
             where: {
-                email,
+                email
             },
         });
-        return res.status(200).json({
-            data,
-            message: "Datos correctamente",
-        });
+
+        await bcrypt.compare(textContent, data.password, (e, result) => {
+            if (result) {
+                return res.status(200).json({
+                    data: data.contrato,
+                    message: "Datos correctamente",
+                });
+            }else{
+                res.status(401).json({
+                    message: 'Usuario o Contraseña Invalido'
+                })
+            }
+        })
     } catch (error) {
-        return res.status(500).json({
-            error: error.message,
+        return res.status(401).json({
+            error: 'Usuario o Contraseña Invalido',
         });
     }
 };
