@@ -1,12 +1,12 @@
 ###
 GET http://localhost:3000/abrageo/pedidos/en/proceso HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJqdWFuIiwiZGlzdHJpYnVpZG9yIjoiSG90dG9zdG9vbHMiLCJwcm9maWxlIjo0LCJleHBpcmVzSW4iOiIxZCIsImlhdCI6MTYxOTY0NzQ1OX0.DNHhw19Upz1Dgiy4mdUgHfBzzX054nnEwFP-ok4MyxQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJkZW1vIiwiZGlzdHJpYnVpZG9yIjoiT1RSTyIsInByb2ZpbGUiOjUsImV4cGlyZXNJbiI6IjFkIiwiaWF0IjoxNjI2NzI5OTIzfQ.78RDxMbQwdVL4VM_exO0ax1h1KCcISoyj1kHyeBlxBo
 
 ###
-PUT  http://localhost:3000/abrageo/pedidos/25 HTTP/1.1
+PUT  http://localhost:3000/abrageo/pedidos/24 HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJIb3R0b3N0b29scyIsImRpc3RyaWJ1aWRvciI6IkhvdHRvc3Rvb2xzIiwicHJvZmlsZSI6NSwiZXhwaXJlc0luIjoiMWQiLCJpYXQiOjE2MTk2NDEwOTV9.b1tjpVQ1JlXYyNPWIuVIXgqy8pXlDjrstrp1De9w1aA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJkZW1vIiwiZGlzdHJpYnVpZG9yIjoiT1RSTyIsInByb2ZpbGUiOjUsImV4cGlyZXNJbiI6IjFkIiwiaWF0IjoxNjI2NzMwNDA3fQ.zsFoOFivR5xDKcvOwGQiS1t2MaNe8BToB7zWoglDgG4
 
 {
     "idEstado": 3,
@@ -28,3 +28,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJIb3R0b
 GET http://localhost:3000/abrageo/pedidos/asesor/distri HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJIb3R0b3N0b29scyIsImRpc3RyaWJ1aWRvciI6IkhvdHRvc3Rvb2xzIiwicHJvZmlsZSI6NSwiZXhwaXJlc0luIjoiMWQiLCJpYXQiOjE2MTkwMzUyNDR9.WMUoJwdYMsB2Sq2nqVRUy4uFUFfTcU3DRDAzdoYCf4M
+
+###
+GET http://localhost:3000/abrageo/pedidos/24 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhc2Vzb3IiOiJkZW1vIiwiZGlzdHJpYnVpZG9yIjoiT1RSTyIsInByb2ZpbGUiOjUsImV4cGlyZXNJbiI6IjFkIiwiaWF0IjoxNjI2NzMwNDA3fQ.zsFoOFivR5xDKcvOwGQiS1t2MaNe8BToB7zWoglDgG4

@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
     prodAbrVen: DataTypes.TEXT,
     asesordistribuidor: DataTypes.STRING,
     razonRechazo: DataTypes.STRING,
-    obsDistribuidor: DataTypes.STRING
+    obsDistribuidor: DataTypes.STRING,
+    obsAsesor: DataTypes.STRING,
   }, {
     sequelize,
     timestamps: false,

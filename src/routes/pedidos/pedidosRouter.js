@@ -27,7 +27,28 @@ router.get("/distri/notifications", verifyToken, pedidosController.getNotificati
 
 
 
-/* _____________________________________PRUEBAS_____________________________________ */
-router.get("/shoping/price", pedidosController.getShoping);
+/* _____________________________________PRUEBAS SHOPPING_____________________________________ */
+
+router.post("/shoping/states", pedidosController.postStates);
+router.post("/shoping/product", pedidosController.getShoping);
+router.post("/shoping/details", pedidosController.postDetails);
+router.post("/shoping/distributor", pedidosController.postDistributor);
+router.post("/shoping/states/filter", pedidosController.postStatesFilter);
+
+/* ________________________________PRUEBAS FORMULARIO PREGUNTAS________________________________*/
+
+router.get("/formulario/states", pedidosController.getStates);
+
+/* __________________________________PRUEBAS FORMULARIO ________________________________ */
+router.post("/states/date", pedidosController.postStatesDate);
+
+/* _____________________________________VALIDACION ADMIN   _____________________________________ */
+
+router.post("/visits/date", pedidosController.postRangeDate);
+router.get("/filter/asesor", pedidosController.getAsesores);
+router.get("/filter/clientes", pedidosController.getClientes);
+router.post("/data/idAsesor", pedidosController.postIdAsesores);
+router.put("/update/comments", pedidosController.putComments);
+
 
 module.exports = router;

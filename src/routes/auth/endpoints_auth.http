@@ -3,6 +3,6 @@ POST http://localhost:3000/abrageo/login HTTP/1.1
 content-type: application/json
 
 {
-    "email": "pablo@sumatec.co",
-    "password": ""
+    "email": "demo@abracol.co",
+    "password": "1022936288*"
 }

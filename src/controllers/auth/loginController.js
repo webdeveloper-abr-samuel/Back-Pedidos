@@ -5,7 +5,9 @@ LoginController = {};
 
 
 const isValidPassword = async(res, asesor, distribuidor, profile, password, hashDB) => {
-    textContent = password.toString();
+
+    let textContent = password.toString();
+
     const compare = await bcrypt.compare(textContent, hashDB, (e, result) => {
         if (result) {
             jwt.sign({ asesor, distribuidor, profile, expiresIn: process.env.JWT_EXPIRES_IN }, process.env.SECRETKEY, (e, token) => {
@@ -88,9 +90,6 @@ LoginController.update = async(req, res) => {
 
 LoginController.postTerminos = async(req, res) => {
     const { email,password } = req.body;
-    let textContent = password.toString();
-    
-    
     try {
         let data = await appusers.findOne({
             attributes: ["contrato", "password"],
@@ -99,7 +98,8 @@ LoginController.postTerminos = async(req, res) => {
             },
         });
 
-        await bcrypt.compare(textContent, data.password, (e, result) => {
+        
+        await bcrypt.compare(password.toString(), data.password, (e, result) => {
             if (result) {
                 return res.status(200).json({
                     data: data.contrato,
